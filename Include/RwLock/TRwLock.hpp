@@ -19,13 +19,14 @@ class TRwLock {
 
     public:
     template<typename ...Args>
-    explicit TRwLock(Args... args) : m_xData{args...} {}
+    explicit TRwLock(Args... args)
+        : m_pData{std::make_unique<T>(args...)} {}
     TRwLock(const TRwLock&)=delete;
     TRwLock& operator=(const TRwLock&)=delete;
 
     public:
-    TRwLockReadGuard<T> Read() { return TRwLockReadGuard<T>(&m_xSharedMutex, &m_xData); }
-    TRwLockWriteGuard<T> Write() { return TRwLockWriteGuard(&m_xSharedMutex, &m_xData); }
+    TRwLockReadGuard<T> Read() { return TRwLockReadGuard<T>(&m_xSharedMutex, &m_pData); }
+    TRwLockWriteGuard<T> Write() { return TRwLockWriteGuard(&m_xSharedMutex, &m_pData); }
     std::optional<TRwLockTryReadGuard<T>> TryRead() { return TryGuard<TRwLockTryReadGuard<T>>(); }
     std::optional<TRwLockTryWriteGuard<T>> TryWrite() { return TryGuard<TRwLockTryWriteGuard<T>>(); }
 
@@ -33,7 +34,7 @@ class TRwLock {
     template<typename TryGuardType>
     std::optional<TryGuardType> TryGuard() {
         bool isAcquired = false;
-        auto guard = std::make_optional<TryGuardType>(&m_xSharedMutex, &m_xData, isAcquired);
+        auto guard = std::make_optional<TryGuardType>(&m_xSharedMutex, &m_pData, isAcquired);
         if(!isAcquired) {
             guard.reset();
         }
@@ -42,7 +43,7 @@ class TRwLock {
 
     protected:
     std::shared_mutex m_xSharedMutex;
-    T m_xData;
+    std::unique_ptr<T> m_pData;
 };
 
 }
