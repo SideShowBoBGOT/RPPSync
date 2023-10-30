@@ -23,7 +23,7 @@ class TRwLockGuardBase {
 
     public:
     inline T* operator->() const { return this->m_pData->get(); }
-    //inline T& operator*() const { return *this->m_pData; }
+    inline T& operator*() const { return *this->m_pData; }
 
     protected:
     void MoveInit(TRwLockGuardBase&& other) noexcept {
