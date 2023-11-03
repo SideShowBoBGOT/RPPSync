@@ -25,14 +25,14 @@ class TRwLock {
     TRwLock& operator=(const TRwLock&)=delete;
 
     public:
-    TRwLockReadGuard<T> Read() { return TRwLockReadGuard<T>(&m_xSharedMutex, &m_pData); }
-    TRwLockWriteGuard<T> Write() { return TRwLockWriteGuard(&m_xSharedMutex, &m_pData); }
-    std::optional<TRwLockTryReadGuard<T>> TryRead() { return TryGuard<TRwLockTryReadGuard<T>>(); }
-    std::optional<TRwLockTryWriteGuard<T>> TryWrite() { return TryGuard<TRwLockTryWriteGuard<T>>(); }
+    TRwLockReadGuard<T> Read() const { return TRwLockReadGuard<T>(&m_xSharedMutex, &m_pData); }
+    TRwLockWriteGuard<T> Write() const { return TRwLockWriteGuard(&m_xSharedMutex, &m_pData); }
+    std::optional<TRwLockTryReadGuard<T>> TryRead() const { return TryGuard<TRwLockTryReadGuard<T>>(); }
+    std::optional<TRwLockTryWriteGuard<T>> TryWrite() const { return TryGuard<TRwLockTryWriteGuard<T>>(); }
 
     protected:
     template<typename TryGuardType>
-    std::optional<TryGuardType> TryGuard() {
+    std::optional<TryGuardType> TryGuard() const {
         bool isAcquired = false;
         auto guard = std::make_optional<TryGuardType>(&m_xSharedMutex, &m_pData, isAcquired);
         if(!isAcquired) {

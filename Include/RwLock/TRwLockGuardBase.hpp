@@ -13,8 +13,9 @@ class TRwLockGuardBase {
     using InnerType = std::remove_const_t<T>;
 
     public:
-    TRwLockGuardBase(std::shared_mutex* sharedMutex, std::unique_ptr<InnerType>* data)
-        : m_pSharedMutex{sharedMutex}, m_pData{data} {}
+    TRwLockGuardBase(const std::shared_mutex* sharedMutex, const std::unique_ptr<InnerType>* data)
+        :   m_pSharedMutex{const_cast<std::shared_mutex*>(sharedMutex)},
+            m_pData{const_cast<std::unique_ptr<InnerType>*>(data)} {}
     ~TRwLockGuardBase()=default;
     TRwLockGuardBase(const TRwLockGuardBase&)=delete;
     TRwLockGuardBase& operator=(const TRwLockGuardBase&)=delete;

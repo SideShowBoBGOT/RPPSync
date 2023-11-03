@@ -8,7 +8,7 @@ namespace rwl {
 template<typename T>
 class TRwLockTryWriteGuard : public TRwLockGuardBase<T> {
     public:
-    TRwLockTryWriteGuard(std::shared_mutex* sharedMutex, std::unique_ptr<T>* data, bool& isAcquired)
+    TRwLockTryWriteGuard(const std::shared_mutex* sharedMutex, const std::unique_ptr<T>* data, bool& isAcquired)
         : TRwLockGuardBase<T>(sharedMutex, data) {
         isAcquired = this->m_pSharedMutex->try_lock();
     };
