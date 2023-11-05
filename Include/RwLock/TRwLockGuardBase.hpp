@@ -24,6 +24,7 @@ class TRwLockGuardBase {
 
     public:
     inline T* operator->() const { return this->m_pData->get(); }
+    inline T* Get() const { return this->m_pData->get(); }
     inline T& operator*() const { return *this->m_pData->get(); }
 
     protected:
