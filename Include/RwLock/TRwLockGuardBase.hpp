@@ -10,12 +10,12 @@ namespace rwl {
 template<typename T>
 class TRwLockGuardBase {
     public:
-    using InnerType = std::remove_const_t<T>;
+    using InnerType = T;
 
     public:
-    TRwLockGuardBase(const std::shared_mutex* sharedMutex, const std::unique_ptr<InnerType>* data)
+    TRwLockGuardBase(const std::shared_mutex* sharedMutex, const T* data)
         :   m_pSharedMutex{const_cast<std::shared_mutex*>(sharedMutex)},
-            m_pData{const_cast<std::unique_ptr<InnerType>*>(data)} {}
+            m_pData{const_cast<T*>(data)} {}
     ~TRwLockGuardBase()=default;
     TRwLockGuardBase(const TRwLockGuardBase&)=delete;
     TRwLockGuardBase& operator=(const TRwLockGuardBase&)=delete;
@@ -23,9 +23,9 @@ class TRwLockGuardBase {
     TRwLockGuardBase& operator=(TRwLockGuardBase&& other) noexcept { MoveInit(std::move(other)); }
 
     public:
-    inline T* operator->() const { return this->m_pData->get(); }
-    inline T* Get() const { return this->m_pData->get(); }
-    inline T& operator*() const { return *this->m_pData->get(); }
+    inline T* operator->() const { return (T*)&this->m_pData; }
+    inline T* Get() const { return (T*)&this->m_pData; }
+    inline T& operator*() const { return this->m_pData; }
 
     protected:
     void MoveInit(TRwLockGuardBase&& other) noexcept {
@@ -37,7 +37,7 @@ class TRwLockGuardBase {
 
     protected:
     std::shared_mutex* m_pSharedMutex;
-    std::unique_ptr<InnerType>* m_pData;
+    T* m_pData;
 };
 
 }
