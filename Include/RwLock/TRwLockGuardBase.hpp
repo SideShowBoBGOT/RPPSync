@@ -9,7 +9,6 @@ namespace rwl {
 
 template<typename T>
 class TRwLockGuardBase {
-    public:
     using InnerType = T;
 
     public:
@@ -23,9 +22,16 @@ class TRwLockGuardBase {
     TRwLockGuardBase& operator=(TRwLockGuardBase&& other) noexcept { MoveInit(std::move(other)); }
 
     public:
-    inline T* operator->() const { return (T*)&this->m_pData; }
-    inline T* Get() const { return (T*)&this->m_pData; }
-    inline T& operator*() const { return this->m_pData; }
+    inline const T* GetPtr() const { return this->m_pData; }
+    inline T* GetPtr() { return this->m_pData; }
+
+    public:
+    inline const T* operator->() const { return this->m_pData; }
+    inline T* operator->() { return this->m_pData; }
+
+    public:
+    inline const T& operator*() const { return *this->m_pData; }
+    inline T& operator*() { return *this->m_pData; }
 
     protected:
     void MoveInit(TRwLockGuardBase&& other) noexcept {
