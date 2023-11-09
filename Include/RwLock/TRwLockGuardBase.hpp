@@ -9,6 +9,7 @@ namespace rwl {
 
 template<typename T>
 class TRwLockGuardBase {
+    public:
     using InnerType = T;
 
     public:
