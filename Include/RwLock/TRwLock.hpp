@@ -6,6 +6,7 @@
 #include <RwLock/TRwLockTryWriteGuard.hpp>
 #include <RwLock/TRwLockTryReadGuard.hpp>
 
+#include <concepts>
 #include <shared_mutex>
 #include <memory>
 #include <optional>
@@ -18,12 +19,9 @@ class TRwLock {
     public:
     using InnerType = T;
 
-    template<typename = std::enable_if_t<std::is_default_constructible_v<T>, void>>
-    TRwLock() {};
-
     public:
     template<typename ...Args>
-    explicit TRwLock(Args&&... args) : m_xData{T(std::forward<Args>(args)...)} {}
+    TRwLock(Args&&... args) : m_xData{T(std::forward<Args>(args)...)} {}
 
     public:
     TRwLock(const TRwLock&)=delete;
