@@ -21,7 +21,7 @@ class TRwLock {
 
     public:
     template<typename ...Args>
-    TRwLock(Args&&... args) : m_xData{T(std::forward<Args>(args)...)} {}
+    TRwLock(Args&&... args) : m_xData(std::forward<Args>(args)...) {}
 
     public:
     TRwLock(const TRwLock&)=delete;
