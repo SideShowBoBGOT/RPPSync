@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.18)
 project(RwLock
     VERSION 0.0.1
     DESCRIPTION "Implementation of Rust's std::sync::RwLock into C++"
